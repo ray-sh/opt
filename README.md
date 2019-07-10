@@ -1,2 +1,2 @@
-# opt
-Elixir concept and function opt code practice
+# OTP
+Elixir concept and function OTP code practice
