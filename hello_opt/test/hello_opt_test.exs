@@ -46,8 +46,22 @@ defmodule HelloOptTest do
     Supervisor.which_children(TestSup) |> IO.inspect()
   end
 
-  test "create supervisor tree with empty children" do
 
+  @doc """
+      sup
+  /         \
+  DynamicSup   Worker
+  """
+  test "create supervisor tree with empty children" do
+    children = [
+      {DynamicSupervisor, strategy: :one_for_one, name: MyApp.DynamicSupervisor},
+      {Agent, fn -> 3 end}
+    ]
+
+    Supervisor.start_link(children, strategy: :one_for_one)
+
+    {:ok, child} = DynamicSupervisor.start_child(MyApp.DynamicSupervisor, Agent.child_spec(fn -> 2 end))
+    assert Agent.get(child, fn state -> state end) == 2
   end
 
 end
