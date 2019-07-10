@@ -39,15 +39,32 @@ defmodule HelloOptTest do
     children = [
       {Agent, fn -> 2 end}, # It will call Agent.child_spec(fn ->2 end)
       %{Agent.child_spec(fn -> 3 end) | id: {Agent,2}},
-      Supervisor.child_spec(Stack, id: {Agent, 6}), # method to update child spec map
+
+      #method to update child spec map, we should use the previsous way
+      #which is much easier to read
+      Supervisor.child_spec(Stack, id: {Agent, 6}),
       Stack # It equals {Stack, []}
     ]
     {:ok,_} = Supervisor.start_link(children, strategy: :one_for_one, name: TestSup)
     Supervisor.which_children(TestSup) |> IO.inspect()
   end
 
-  test "create supervisor tree with empty children" do
-
+  @doc """
+  Supervisor tree and module based supervisor
+  A module-based supervisor gives you more direct control over how the supervisor is initialized
+       RootSup
+      /       \
+    Sup1       Worker3
+    /     \
+  Worker1  Worker2
+  """
+  test "supervisor tree" do
+    children = [
+      DbSuper,
+      %{Agent.child_spec(fn -> 3 end) | id: {Agent,3}}
+    ]
+    {:ok,_} = Supervisor.start_link(children, strategy: :one_for_one, name: TestSup)
+    Supervisor.which_children(TestSup) |> IO.inspect()
   end
 
 end
