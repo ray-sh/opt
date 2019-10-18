@@ -49,7 +49,6 @@ defmodule HelloOptTest do
     Supervisor.which_children(TestSup) |> IO.inspect()
   end
 
-<<<<<<< HEAD
 
   @doc """
       sup
@@ -66,7 +65,8 @@ defmodule HelloOptTest do
 
     {:ok, child} = DynamicSupervisor.start_child(MyApp.DynamicSupervisor, Agent.child_spec(fn -> 2 end))
     assert Agent.get(child, fn state -> state end) == 2
-=======
+  end
+
   @doc """
   Supervisor tree and module based supervisor
   A module-based supervisor gives you more direct control over how the supervisor is initialized
@@ -83,7 +83,6 @@ defmodule HelloOptTest do
     ]
     {:ok,_} = Supervisor.start_link(children, strategy: :one_for_one, name: TestSup)
     Supervisor.which_children(TestSup) |> IO.inspect()
->>>>>>> 78a6894e88f92d9002b928d63b2d0d5b252d2749
   end
 
 
